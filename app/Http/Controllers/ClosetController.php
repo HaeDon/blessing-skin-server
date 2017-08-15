@@ -35,6 +35,7 @@ class ClosetController extends Controller
         $category = $request->input('category', 'skin');
         $page     = abs($request->input('page', 1));
         $q        = $request->input('q', null);
+        $width    = $request->input('width', null);
 
         $items = [];
 
@@ -50,9 +51,11 @@ class ClosetController extends Controller
         }
 
         // pagination
-        $total_pages = ceil(count($items) / 6);
+        $row = $width == 1080 ? 8 : 6;
+        
+        $total_pages = ceil(count($items) / $row);
 
-        $items = array_slice($items, ($page - 1) * 6, 6);
+        $items = array_slice($items, ($page - 1) * $row, $row);
 
         return response()->json([
             'category'    => $category,
